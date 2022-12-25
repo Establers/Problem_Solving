@@ -2,8 +2,7 @@ import sys
 
 T = int(sys.stdin.readline())
 
-while True :
-    try : 
-        a, b = map(int, sys.stdin.readline().rstrip().split())
-        print(a+b)
-    except : break
+for _ in range(T) :
+    a, b = map(int, sys.stdin.readline().split())
+    print(a+b)
+    
