@@ -1,11 +1,12 @@
-import sys
-input = sys.stdin.readline
+import speech_recognition as sr
+# print(sr.__version__)
+r = sr.Recognizer()
+mic = sr.Microphone()
 
-T = int(input())
+with mic as source :
+    audio = r.listen(source)
 
-for i in range(T) : 
-    _list = list(map(int, sys.stdin.readline().split()))
-    avg = sum(_list) / 10
-    print("#{} {}".format(i, avg))
+r.recognize_google(audio)
+
 
 
