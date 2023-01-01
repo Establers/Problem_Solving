@@ -1,13 +1,8 @@
-import calendar
-c = calendar.TextCalendar()
-m = c.formatmonth(2012,2)
-print(m)
+import  os
+print(os.getcwd())
+print(os.listdir())
 
-import tkinter as tk
+f = open("LICENSE.txt")
+f.readline()
+# \n 이 나타나면 한 줄이 끝난 줄 알고 딱 멈춤
 
-s = "중요한 것은 꺾이지 않는 마음"
-root = tk.Tk()
-t = tk.Text(root, height=20, width=20)
-t.insert(tk.END, m)
-t.pack()
-tk.mainloop()
