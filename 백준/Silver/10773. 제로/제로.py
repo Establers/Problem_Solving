@@ -1,5 +1,6 @@
 from collections import deque
-
+import sys
+input = sys.stdin.readline
 k = int(input())
 queue = deque()
 sum = 0
@@ -15,5 +16,3 @@ for j in queue :
     sum += j
 
 print(sum)
-
-# print(sum(queue))
