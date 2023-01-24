@@ -1,6 +1,7 @@
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(100000)
+from collections import deque
+#sys.setrecursionlimit(100000)
 
 v, e = map(int, input().split())
 # 노드, 간선 개수
@@ -13,21 +14,27 @@ for i in range(e) :
     graph[a].append(b)
     graph[b].append(a)
 
-
-
-def dfs(a) :
-    if visited[a] == False :
-        visited[a] = True
-        for i in graph[a] :
-            dfs(i)
-        return True
-    return False
+def bfs(a) :
+    q = deque()
+    q.append(a)
+    visited[a] = True
+    while q :
+        now = q.popleft()
+        for i in graph[now] :
+            if visited[i] == False :
+                q.append(i)
+                visited[i] = True
 
 result = 0
 
 for i in range(1, v+1) :
-    if dfs(i) == True :
-        result += 1
+    if visited[i] == False :
+        if graph[i] :
+            bfs(i)
+            result += 1
+        else :
+            visited[i] = True
+            result += 1
 
 print(result)
 
