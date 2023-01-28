@@ -1,4 +1,5 @@
-# 하나를 구성하면 거기서 가장 큰 값을 제거하고 마을을 두개로 만든다 .
+import sys
+input = sys.stdin.readline
 def find_parent(parent, x) :
     if parent[x] != x :
         parent[x] = find_parent(parent, parent[x])
