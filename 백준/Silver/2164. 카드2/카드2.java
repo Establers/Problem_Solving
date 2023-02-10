@@ -1,22 +1,26 @@
-import java.util.ArrayDeque;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int n = scanner.nextInt();
-		
-		Queue<Integer> q = new ArrayDeque<>();
-		for(int i=1; i<=n; i++) {
-			q.add(i);
+	static int N;
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		Queue<Integer> que = new ArrayBlockingQueue<>(N);
+		for(int i=1; i<=N ; i++) {
+			que.offer(i);
 		}
 		
-		while(q.size() != 1) {
-			q.poll();
-			q.add(q.poll());
+		while(true) {
+			if(que.size()==1) break;
+			que.poll();
+			if(que.size()==1) break;
+			que.offer(que.poll());
 		}
-		
-		System.out.println(q.peek());
+		System.out.println(que.poll());
 	}
 }
