@@ -1,0 +1,6 @@
+-- 코드를 입력하세요
+SELECT NAME, count(animal_id) as "COUNT"
+FROM animal_ins
+group by name
+having count(animal_id) >= 2 and name is not null
+order by name
