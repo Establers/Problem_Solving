@@ -1,17 +1,19 @@
-import heapq
 import sys
+import heapq
 input = sys.stdin.readline
-
-n = int(input())
 
 q = []
 
+n = int(input())
+
 for i in range(n) :
-    a = int(input())
-    if a > 0 :
-        heapq.heappush(q, a)
-    elif a == 0 :
-        if q :
+    num = int(input())
+    if num == 0 :
+        if(q) :
             print(heapq.heappop(q))
-        else : # 큐가 비어있을 경우
+        else :
             print(0)
+    else :
+        heapq.heappush(q, num)
+
+
