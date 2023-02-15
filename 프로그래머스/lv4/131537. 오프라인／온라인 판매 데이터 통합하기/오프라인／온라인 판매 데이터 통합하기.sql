@@ -1,9 +1,16 @@
 -- 코드를 입력하세요
-SELECT date_format(SALES_DATE, '%Y-%m-%d') as "SALES_DATE", PRODUCT_ID, USER_ID, SALES_AMOUNT
-FROM online_sale
-where date_format(sales_date, '%Y-%m') = '2022-03'
-union 
-SELECT date_format(SALES_DATE, '%Y-%m-%d'), PRODUCT_ID, NULL as USER_ID, SALES_AMOUNT
-FROM offline_sale
-where date_format(sales_date, '%Y-%m') = '2022-03'
-Order by sales_date asc, product_id asc , user_id asc
+select date_format(sales_date,'%Y-%m-%d') SALES_DATE, PRODUCT_ID, USER_ID, SALES_AMOUNT
+from
+(
+    SELECT sales_date, product_id, user_id, sales_amount
+    from online_sale a
+    where (sales_date like '2022-03%') 
+
+    union
+
+    SELECT sales_date, product_id, NULL, sales_amount
+    from offline_sale b
+    where (sales_date like '2022-03%') 
+) c
+order by sales_date, product_id, user_id
+;
