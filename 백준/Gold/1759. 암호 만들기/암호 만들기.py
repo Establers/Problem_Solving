@@ -1,36 +1,35 @@
-import sys
-import itertools
-input = sys.stdin.readline
+moum = ["a", "e", "i", "o", "u"]
 
 L, C = map(int, input().split())
+str_list = list(input().split())
+str_list.sort()
 
-chars = list(input().split())
-chars.sort() # 알파벳 순을 위한 정렬
+# print(str_list)
 
-moum = ["a","e","i","o","u"]
-result = []
+# a..b...c..d..e 증가하는 순서로 넣어야 하고
+# 최소 한개의 모음이 포함되어야 한다
+temp = []
+visited = [ False for _ in range(C) ]
+result_list = [ 0 for _ in range(L) ]
 
-def conca(list_) :
-    temp = ''
-    for i in list_ :
-        temp += i
-    return temp
-    
-for pw in itertools.combinations(chars, L) : 
-    # 단어 선택 pw
-    count = 0
-    
-    # 1. 단어 스펠링 하나하나를 보면서 모음인지 아닌지 확인 
-    for i in pw : 
-        if i in moum :
-            count += 1 # 모음의 개수를 증가시킴
-            
-    if count >= 1 and count <= L-2 : # 이 단어가 조건을 만족하는지 ?
-        # 맞다면
-        # result.append(pw)
-        # pw는 ('a', 't', 'c', 'i') 이런 형식의 값이니 변경 필요
-        result.append(
-            conca(list(pw))
-        )
+def backtracking(depth, flag, idx):
+    global result_list
+    if(depth == L):
+        count = 0
+        for i in result_list :
+            if (i in moum) :
+                count += 1
+        if(count >= 1 and L-count >= 2) :
+            print(*result_list, sep='')
+        return
 
-print(*result, sep='\n')
+    else :
+        for i in range(idx, C) :
+            if(flag & 1<<i) != 0 : continue
+            result_list[depth] = str_list[i]
+            backtracking(depth + 1, flag | (1<<i), i+1)
+
+backtracking(0,0,0)
+
+
+
