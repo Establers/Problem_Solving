@@ -1,19 +1,36 @@
+import sys
 import itertools
-
-moum = ["a", "e", "i", "o", "u"]
+input = sys.stdin.readline
 
 L, C = map(int, input().split())
-str_list = list(input().split())
-str_list.sort()
 
-# a..b...c..d..e 증가하는 순서로 넣어야 하고
-# 최소 한개의 모음이 포함되어야 한다 + 두개의 자음
+chars = list(input().split())
+chars.sort() # 알파벳 순을 위한 정렬
 
-for perm_str in itertools.combinations(str_list, L) :
+moum = ["a","e","i","o","u"]
+result = []
+
+def conca(list_) :
+    temp = ''
+    for i in list_ :
+        temp += i
+    return temp
+    
+for pw in itertools.combinations(chars, L) : 
+    # 단어 선택 pw
     count = 0
-    for i in perm_str :
+    
+    # 1. 단어 스펠링 하나하나를 보면서 모음인지 아닌지 확인 
+    for i in pw : 
         if i in moum :
-            count += 1
+            count += 1 # 모음의 개수를 증가시킴
+            
+    if count >= 1 and count <= L-2 : # 이 단어가 조건을 만족하는지 ?
+        # 맞다면
+        # result.append(pw)
+        # pw는 ('a', 't', 'c', 'i') 이런 형식의 값이니 변경 필요
+        result.append(
+            conca(list(pw))
+        )
 
-    if(count >= 1 and L-count >= 2) :
-        print(*list(perm_str), sep='')
+print(*result, sep='\n')
