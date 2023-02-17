@@ -2,23 +2,31 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-graph = [] #
+seq = []
 
-for i in range(n) :
-    a, b = map(int , input().split())
-    graph.append((a,b))
-    # a <= b 인건 명백한가?... 과거에 끝나는 회의는 없다고 생각..
+for i in range(n):
+    a, b = map(int, input().split())
+    seq.append((a,b))
 
-graph.sort(key = lambda x : (x[1], x[0]))
 
-# print(graph)
+seq.sort(key = lambda  x : (x[1],x[0]))
+#print(seq)
 
-count = 0
-lastTime = 0
 
-for a, b in graph :
-    if a >= lastTime :
+answer = 0
+
+now_a = seq[0][0]
+now_b = seq[0][1]
+count = 1
+for a,b in seq[1:]:
+    if a >= now_b :
+        now_a = a
+        now_b = b
+        #print(now_a, now_b)
         count += 1
-        lastTime = b
 
 print(count)
+
+
+
+
