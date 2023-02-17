@@ -1,154 +1,148 @@
-import java.util.Scanner;
-
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int[][] board;
-    static int[][] rotation;
-    static int n, m;
-    static int[][] copyArray;
-    static int[][] copyArray2;
-    static boolean[] visited; 
-    static int[] numbers;
-    
-    static int result = Integer.MAX_VALUE;
-    
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        
-        n = scan.nextInt();
-        m = scan.nextInt();
-        int k = scan.nextInt(); // 배열 돌리는 횟수
-        visited = new boolean[k]; 
-        copyArray2 = new int[n][m];
-        numbers = new int[k];
-        board = new int[n][m];
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
-                board[i][j] = scan.nextInt();
-            }
-        }
-        // board에 값 넣기
-        
-        
-        rotation = new int[k][3];
-        for(int i = 0; i < k; i++) {
-            rotation[i][0] = scan.nextInt();
-            rotation[i][1] = scan.nextInt();
-            rotation[i][2] = scan.nextInt();
-        }         
+	static int N, M, K, tmp;
+	static int result = Integer.MAX_VALUE;
+	static int[][] map, rotArr;
+	static boolean[] taken;
+	static final int R=0, C=1, S=2;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N=Integer.parseInt(st.nextToken());
+		M=Integer.parseInt(st.nextToken());
+		K=Integer.parseInt(st.nextToken());
+		map = new int[N][M];
+		rotArr = new int[K][3];
+		taken = new boolean[K];
+		
+		for(int y=0;y<N;y++) {
+			st = new StringTokenizer(br.readLine());
+			for(int x=0;x<M;x++) {
+				map[y][x] = Integer.parseInt(st.nextToken());
+			}
+		}
+		
+		for(int i=0;i<K;i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j=0;j<3;j++) {
+				rotArr[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		int cnt=K;
+		//연산 수행, 먼저 수행할 회전방법 지정
+		for(int i=0;i<K;i++) {
+			doRotate(cnt-1,i);
+		}
+		System.out.println(result);
+		
+	}
 
-//        for(int a=0; a<n; a++) {
-//			for(int b=0; b<m; b++) {
-//				copyArray2[a][b] = board[a][b];
-//			}
-//		}
-        
-        perm(0, k);
-        
-        System.out.println(result);
-    }
-    
-    public static void perm(int cnt, int k) {   	
-    	if(cnt == k) { 
-    		int[][] copyArray2 = new int[n][m];
-    		for(int a=0; a<n; a++) {
-    			for(int b=0; b<m; b++) {
-    				copyArray2[a][b] = board[a][b];
-    			}
-    		}
-    		
-    		for(int i=0; i<k; i++) {
-    			rotation(n, m, rotation[numbers[i]][0], rotation[numbers[i]][1], rotation[numbers[i]][2], copyArray2);
-    		}
-    		
-//        	for(int i=0; i<n; i++) {
-//        		for(int j=0; j<m; j++) {
-//        			System.out.print(copyArray2[i][j]);
-//        		}
-//        		System.out.println();
-//    		}
-//        	System.out.println();
-    		result = Math.min(result, get_sum_lineby(copyArray2));
-    		
-    		return;
-    	}
-    	
-    	else {
-    		for(int i=0; i<k; i++) {
-    			if(!visited[i]) {
-    				visited[i] = true;
-    				numbers[cnt] = i;
-//    				rotation(n, m, rotation[i][0], rotation[i][1], rotation[i][2], arr);
-    				perm(cnt+1, k);
-    				visited[i] = false;
-    			}
-    		}
-    		
-    	}
-    	
-    }
-    
-    public static void rotation(int N, int M, int R, int C, int S, int[][] arr) {
-    	
-    	// int repeat = Math.min(R-C-, M) / 2;
-    	
-    	int repeat = S;	
-    	int goX = R-S-1;
-    	int goY = C-S-1;
-    	int stopX = R+S-1; 
-    	int stopY = C+S-1;
-   
-    	// 
-//    	for(int i=0; i<N; i++) {
-//    		for(int j=0; j<M; j++) {
-//    			System.out.print(copyArray[i][j]);
-//    		}
-//    		System.out.println();
-//    	}
-    	// (R-C, C-S) to (R+C, C+S)
-    	for(int i=0; i < repeat; i++) {  // 안쪽으로 들어가는 횟수
-    		int temp = arr[goX + i][goY + i]; 
-  
-    		// 왼
-    		for(int j=goX + i; j< stopX - i; j++) {
-    			arr[j][goY + i] = arr[j+1][goY + i];
-    		}
-    		
-    			
-    		// 아래
-    		for(int j=goY + i; j < stopY - i; j++) {
-    			arr[stopX-i][j] = arr[stopX-i][j+1];  
-    		}
-    			
-    		// 오른
-    		for(int j=stopX - i; j > goX + i; j--) {
-    			arr[j][stopY - i] = arr[j-1][stopY - i]; 
-    		}
-    		
-    		// 위
-    		for(int j=stopY - i; j > goY + i; j--) {
-    			arr[goX+i][j] = arr[goX+i][j-1]; 
-    		}
-    		
-    		arr[goX + i][goY + i + 1] = temp;		
-    	}
-//    	
+	private static void doRotate(int cnt, int pick) {
+//		System.out.print("방법"+pick+" / ");
+		if(!taken[pick]) {
+			taken[pick]=true;
 
-    	
-    }
-    
-    public static int get_sum_lineby(int[][] arr) {
-    	int value = Integer.MAX_VALUE;
-    	int temp = 0;
-        for(int i = 0; i < n; i++) {
-        	temp = 0;
-            for(int j = 0; j < m; j++) {
-                temp = arr[i][j] + temp; 
-            }
-            value = Math.min(value, temp);
-        }
-    	return value;
-    }
-  
+			
+			//연산 수행
+			for(int size=rotArr[pick][S];size>0;size--) {
+				doRoll(pick,size);
+			}
+			
+			//다음 연산 지정
+			for(int i=0;i<K;i++) {
+				if(!taken[i])
+					doRotate(cnt-1,i);
+			}
+			if(cnt==0) {
+				calcRows();
+			}
+			
+			//연산 역수행
+			for(int size=rotArr[pick][S];size>0;size--) {
+				doRollReverse(pick, size);
+			}
+			
+			
+			taken[pick]=false;
+		}
+	}
+
+
+	//주어진 크기의 사각형 시계 반대방향 roll
+	private static void doRollReverse(int pick, int size) {
+		int LTY, LTX; //LEFT TOP지점의 X,Y
+		LTY=rotArr[pick][R]-size-1;
+		LTX=rotArr[pick][C]-size-1;
+		
+		int x,y;
+		
+		tmp=map[LTY][LTX];
+		x=LTX; y=LTY; //위쪽변 roll
+		for(;x<LTX+size*2;x++) {
+			map[y][x]=map[y][x+1]; 
+		}
+		x=LTX+size*2; //우측변 roll
+		for(;y<LTY+size*2;y++) {
+			map[y][x]=map[y+1][x]; 
+		}
+		y=LTY+size*2; //아랫변 roll
+		for(;x>LTX;x--) {
+			map[y][x]=map[y][x-1]; 
+		}
+		x=LTX; //좌측변 roll
+		for(;y>LTY;y--) {
+			map[y][x]=map[y-1][x]; 
+		}
+		map[LTY+1][LTX] = tmp;
+		
+	}
+	
+	private static void doRoll(int pick, int size) {
+		int LTY, LTX; //LEFT TOP지점의 X,Y
+		LTY=rotArr[pick][R]-size-1;
+		LTX=rotArr[pick][C]-size-1;
+
+		int x,y;
+		
+		tmp=map[LTY][LTX+2*size-1];
+		x=LTX+2*size-1; y=LTY; //위쪽변 roll
+		for(;x>LTX;x--) {
+			map[y][x]=map[y][x-1]; 
+		}
+		x=LTX; y=LTY; //좌측변 roll
+		for(;y<LTY+size*2;y++) {
+			map[y][x]=map[y+1][x]; 
+		}
+		y=LTY+size*2; //아랫변 roll
+		for(;x<LTX+size*2;x++) {
+			map[y][x]=map[y][x+1]; 
+		}
+		x=LTX+size*2; //우측변 roll
+		for(;y>LTY;y--) {
+			map[y][x]=map[y-1][x]; 
+		}
+		map[LTY][LTX+2*size] = tmp;
+		
+	}
+
+
+	private static void calcRows() {
+		int total;
+		for(int[] row : map) {
+			total=0;
+			for(int i : row) {
+				total+=i;
+			}
+			result = Math.min(total, result);
+		}
+	}
+
 }
