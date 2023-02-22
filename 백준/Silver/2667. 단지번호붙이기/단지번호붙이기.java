@@ -7,14 +7,15 @@ import java.util.List;
 import java.util.Queue;
 
 public class Main {
-	static int N, cnt;
-	static boolean[][] map;
-	static List<Integer> list ;
-	static Queue<int[]> houses ;
-	static int[] dirX = {0,0,-1,1};
-	static int[] dirY = {-1,1,0,0};
 	
 	public static void main(String[] args) throws NumberFormatException, IOException {
+		int N, cnt;
+		boolean[][] map;
+		List<Integer> list ;
+		Queue<int[]> houses ;
+		int[] dirX = {0,0,-1,1};
+		int[] dirY = {-1,1,0,0};
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		N = Integer.parseInt(br.readLine());
 		map = new boolean[N][N];
@@ -61,7 +62,5 @@ public class Main {
 		for(int a : list) {
 			System.out.println(a);
 		}
-		
-		
 	}
 }
