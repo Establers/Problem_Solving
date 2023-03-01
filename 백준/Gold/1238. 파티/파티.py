@@ -46,8 +46,10 @@ for i in range(1, n+1) :
     djikstra(i, distance_go)
     answer[i] += distance_go[x]
 
-    distance_back = [int(1e9)] * (n + 1)
-    djikstra(x, distance_back)
+# X에서 N으로 가는 시간
+distance_back = [int(1e9)] * (n + 1)
+djikstra(x, distance_back)
+for i in range(1, n+1) :
     answer[i] += distance_back[i]
 
 print(max(answer))
