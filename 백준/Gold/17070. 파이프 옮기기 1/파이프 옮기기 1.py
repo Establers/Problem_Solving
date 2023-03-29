@@ -1,64 +1,36 @@
 import sys
 input = sys.stdin.readline
-from collections import deque
+
 n = int(input())
-graph = []
+board = []
 
-for i in range(n) :
-    a = list(map(int, input().split()))
-    graph.append(a)
-board = [ [0]*n for _ in range(n) ]
+for _ in range(n) :
+    board.append(list(map(int, input().split())))
 
-dx = [0, 1, 1]
-dy = [1, 0, 1]
-# x +1 /  y+1   / x+1, y+1, (x+1,y+1) 점검 필요 암것도 없어야 이동가능
-def dfs(x, y, status) :
-    global result
+dp = [
+    [[0] * 3 for _ in range(n)]
+    for _ in range(n)
+]
+# 0 : ㅡ
+# 1 : |
+# 2 : ＼
+def init() :
+    dp[0][1][0] = 1
+    for i in range(2, n) :
+        if board[0][i] == 0 :
+            dp[0][i][0] = 1
+        else :
+            break
 
-    if x == n-1 and y == n-1 : # end 조건
-        result += 1
-        return
-    # dx = [0, 1, 1]
-    # dy = [1, 0, 1]
-    if(status == 0) :
-        if(x+1 < n and y+1 < n) :
-            if (graph[x+1][y+1] != 1 and graph[x][y+1] != 1
-                    and graph[x+1][y] != 1):
-                dfs(x+1, y+1, 2)
-        if (x < n and y+1 < n) :
-            if (graph[x][y+1] != 1):
-                    dfs(x, y+1, 0)
-    if(status == 1) :
-        if (x + 1 < n and y + 1 < n):
-            if (graph[x + 1][y + 1] != 1 and graph[x][y + 1] != 1
-                    and graph[x + 1][y] != 1):
-                dfs(x + 1, y + 1, 2)
-        if (x + 1 < n and y < n):
-            if (graph[x + 1][y] != 1):
-                dfs(x + 1, y, 1)
+init()
 
-    if(status == 2) :
-        if (x + 1 < n and y + 1 < n):
-            if (graph[x + 1][y + 1] != 1 and graph[x][y + 1] != 1
-                    and graph[x + 1][y] != 1):
-                dfs(x + 1, y + 1, 2)
-        if (x + 1 < n and y < n):
-            if (graph[x + 1][y] != 1):
-                dfs(x + 1, y, 1)
-        if (x < n and y+1 < n) :
-            if (graph[x][y+1] != 1):
-                    dfs(x, y+1, 0)
+for i in range(1, n) :
+    for j in range(1, n) :
+        if board[i][j] == 0 :
+            dp[i][j][0] = dp[i    ][j - 1][0] + dp[i    ][j - 1][2]
+            dp[i][j][1] = dp[i - 1][j    ][2] + dp[i - 1][j    ][1]
 
-#...............................................;;;;;;;;;
+            if board[i-1][j-1] == 0 and board[i-1][j] == 0 and board[i][j-1] == 0 :
+                dp[i][j][2] = dp[i - 1][j - 1][2] + dp[i - 1][j - 1][1] + dp[i-1][j-1][0]
 
-
-result = 0
-if(graph[n-1][n-1] == 1) :
-    print(0)
-else :
-    dfs(0,1,0)
-    print(result)
-#print(graph)
-
-
-
+print(dp[i][j][0] + dp[i][j][1] + dp[i][j][2])
