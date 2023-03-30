@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,64 +6,75 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int N,M,V;
-	static boolean table[][];
-	static boolean visited[];
+
+	static StringBuilder sb = new StringBuilder();
+	static boolean[] check;
+	static int[][] arr;
 	
-	public static void DFS(int k) {
-		System.out.print(k + " ");
-		visited[k] = true;
+	static int node, line, start;
+	
+	static Queue<Integer> q = new LinkedList<>();
+
+	public static void main(String[] args) throws IOException {
 		
-		for(int i=0; i<= N; i++) {
-			if(!visited[i] && table[k][i]) {
-				DFS(i);
-			}
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		node = Integer.parseInt(st.nextToken());
+		line = Integer.parseInt(st.nextToken());
+		start= Integer.parseInt(st.nextToken());
+		
+		arr = new int[node+1][node+1];
+		check = new boolean[node+1];
+		
+		for(int i = 0 ; i < line ; i ++) {
+			StringTokenizer str = new StringTokenizer(br.readLine());
+			
+			int a = Integer.parseInt(str.nextToken());
+			int b = Integer.parseInt(str.nextToken());
+			
+			arr[a][b] = arr[b][a] =  1;	
 		}
+			//sb.append("\n");
+			dfs(start);
+			sb.append("\n");
+			check = new boolean[node+1];
+			
+			bfs(start);
+			
+			System.out.println(sb);
+		
+		}
+	public static void dfs(int start) {
+		
+		check[start] = true;
+		sb.append(start + " ");
+		
+		for(int i = 0 ; i <= node ; i++) {
+			if(arr[start][i] == 1 && !check[i])
+				dfs(i);
+		}
+		
 	}
 	
-	
-	public static void BFS() {
-		Queue<Integer> q = new LinkedList<>();
-		q.add(V);
-		visited[V] = true;
+	public static void bfs(int start) {
+		q.add(start);
+		check[start] = true;
 		
 		while(!q.isEmpty()) {
-			int now = q.poll();
-			System.out.print(now + " ");
-			for(int i=1; i<=N; i++) {
-				if(!visited[i] && table[now][i]) {
+			
+			start = q.poll();
+			sb.append(start + " ");
+			
+			for(int i = 1 ; i <= node ; i++) {
+				if(arr[start][i] == 1 && !check[i]) {
 					q.add(i);
-					visited[i] = true;
+					check[i] = true;
 				}
 			}
 		}
 		
 		
 	}
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer stk = new StringTokenizer(br.readLine());
-		
-		N = Integer.parseInt(stk.nextToken());
-		M = Integer.parseInt(stk.nextToken());
-		V = Integer.parseInt(stk.nextToken());
-		
-		table = new boolean[N+1][N+1];
-		visited = new boolean[N+1];
-		
-		for(int i=0; i<M; i++) {
-			stk = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(stk.nextToken());
-			int b = Integer.parseInt(stk.nextToken());
-			table[a][b] = true;
-			table[b][a] = true;
-			// 양방향
-		}
-		visited = new boolean[N+1];
-		DFS(V);
-		System.out.println();
-		visited = new boolean[N+1];
-		BFS();
-	}
+
 }
