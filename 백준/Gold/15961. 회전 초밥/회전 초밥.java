@@ -1,10 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -45,22 +41,26 @@ public class Main {
 
 		max = count;
 
-		for (int i = 1; i < N; i++) {
+		for (int i = 1; i <= N; i++) {
 			if (max <= count) {
 				max = count;
-				if(visited[C] == 0) {
+				if (visited[C] == 0) {
 					max++;
 				}
 			}
-			visited[belt[i - 1]]--;
-			if(visited[belt[i - 1]] == 0) {
-				count--;
+			if (i == N) {
+				return max;
 			}
 			
-			if(visited[belt[(i + K -1) % N]] == 0) {
+			visited[belt[i - 1]]--;
+			if (visited[belt[i - 1]] == 0) {
+				count--;
+			}
+
+			if (visited[belt[(i + K - 1) % N]] == 0) {
 				count++;
 			}
-			visited[belt[(i + K -1) % N]]++;
+			visited[belt[(i + K - 1) % N]]++;
 		}
 		return max;
 	}
