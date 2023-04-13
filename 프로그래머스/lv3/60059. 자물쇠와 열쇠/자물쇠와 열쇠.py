@@ -37,7 +37,6 @@ def key_lock_checker(lock) :
     for i in range(m, m+n+1) :
         for j in range(m, m+n+1) :
             if lock[i][j] == 2 or lock[i][j] == 0 :
-                # print(i, j, "False")
                 return False
             
     return True
@@ -74,29 +73,19 @@ def solution(key, lock):
             padded_lock[i][j] = lock[i-m][j-m]
     
 
-    
     def find() :
         global answer
         #3. 탐색 시작 인덱스
         for sx in range(0, n+m+1) :
             for sy in range(0, n+m+1) : 
-                # padded_lock = key_lock_adder(sx, sy, padded_lock, key)
-                # print(*key_lock_adder(sx, sy, padded_lock, key),sep='\n')
                 now_lock = key_lock_adder(sx, sy, padded_lock, key, lock)
-                # print(*now_lock, sep='\n')
                 if key_lock_checker(now_lock) :
-                    print(">>>>>.............")
                     answer = True
-                    print(answer)
                     return
-    
-    # key = key_rotation(key)
-    # print(*key,sep='\n')
+
     for _ in range(4) : # 0, 1, 2, 3
         if answer : break
         find()
         key = key_rotation(key)
-    
-    print(answer)
-    
+
     return answer 
